@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.vite/
+*.log
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+*.sqlite
+*.sqlite-journal
+/data/
