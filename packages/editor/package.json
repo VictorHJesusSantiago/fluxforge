@@ -1,0 +1,24 @@
+{
+  "name": "@fluxforge/editor",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The browser-based visual workflow editor: a canvas node graph, a schema-driven property panel, and live run status.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": ["src", "dist"],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fluxforge/core": "0.1.0",
+    "@fluxforge/sdk": "0.1.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.7"
+  }
+}
