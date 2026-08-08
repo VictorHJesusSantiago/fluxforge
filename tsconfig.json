@@ -1,0 +1,28 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/queue" },
+    { "path": "packages/sdk" },
+    { "path": "packages/registry" },
+    { "path": "packages/server" },
+    { "path": "packages/editor" },
+    { "path": "packages/nodes/if" },
+    { "path": "packages/nodes/http-request" },
+    { "path": "packages/nodes/manual" },
+    { "path": "packages/nodes/cron" },
+    { "path": "packages/nodes/webhook" },
+    { "path": "packages/nodes/switch" },
+    { "path": "packages/nodes/filter" },
+    { "path": "packages/nodes/set" },
+    { "path": "packages/nodes/aggregate" },
+    { "path": "packages/nodes/code" },
+    { "path": "packages/nodes/no-op" },
+    { "path": "packages/nodes/respond-to-webhook" },
+    { "path": "packages/nodes/slack-webhook" },
+    { "path": "packages/nodes/discord-webhook" },
+    { "path": "packages/nodes/github-issue" },
+    { "path": "packages/nodes/rss-read" },
+    { "path": "packages/nodes/google-sheets-append" }
+  ]
+}
