@@ -1,0 +1,327 @@
+:root {
+  color-scheme: dark;
+  --bg: #0f1117;
+  --panel: #14161d;
+  --border: #262a33;
+  --fg: #e6e6e6;
+  --muted: #8a8aa0;
+  --accent: #6ea8fe;
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.ff-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.ff-toolbar__brand {
+  font-weight: 700;
+}
+
+.ff-toolbar__name {
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-width: 200px;
+}
+
+.ff-toolbar button {
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.ff-toolbar__run {
+  color: #3ddc84;
+  border-color: #3ddc84;
+}
+
+.ff-toolbar__status {
+  color: var(--muted);
+  font-size: 0.85em;
+  margin-left: auto;
+}
+
+.ff-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 220px 1fr 300px;
+  min-height: 0;
+}
+
+.ff-palette,
+.ff-panel {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.ff-panel {
+  border-right: none;
+  border-left: 1px solid var(--border);
+}
+
+.ff-palette__section h4 {
+  text-transform: uppercase;
+  font-size: 0.7em;
+  color: var(--muted);
+  margin: 14px 0 6px;
+  letter-spacing: 0.05em;
+}
+
+.ff-palette__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.ff-palette__item:hover {
+  border-color: var(--accent);
+}
+
+.ff-canvas-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: default;
+}
+
+.ff-panel__empty {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.ff-panel__header h3 {
+  margin: 0 0 4px;
+}
+
+.ff-panel__header p {
+  color: var(--muted);
+  font-size: 0.8em;
+  margin: 0 0 12px;
+}
+
+.ff-panel__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.ff-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.ff-field label {
+  font-size: 0.75em;
+  color: var(--muted);
+}
+
+.ff-field input,
+.ff-field select,
+.ff-field textarea {
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 4px;
+  padding: 5px 7px;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+
+.ff-field__error {
+  color: #ef476f;
+  font-size: 0.75em;
+}
+
+.ff-panel__delete {
+  background: #2a1418;
+  border: 1px solid #ef476f;
+  color: #ef476f;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.ff-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* An author stylesheet's `display` always wins over the UA default `[hidden] { display: none }`
+   rule at equal specificity — without this, setting the `hidden` attribute stops the overlay
+   from being *drawn* as visible in some situations but does not stop it from being laid out and
+   intercepting clicks across the whole viewport, since `display: flex` above still applies. */
+.ff-modal-overlay[hidden] {
+  display: none;
+}
+
+.ff-modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.ff-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ff-modal__header h3 {
+  margin: 0;
+}
+
+.ff-modal__close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.ff-modal__hint {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.ff-cred-list,
+.ff-dlq-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ff-cred-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.ff-cred-item button,
+.ff-dlq-item button {
+  background: #2a1418;
+  border: 1px solid #ef476f;
+  color: #ef476f;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.ff-cred-empty,
+.ff-dlq-empty {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.ff-cred-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ff-cred-form input,
+.ff-cred-form textarea {
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-family: inherit;
+}
+
+.ff-dlq-item {
+  background: #1a1d24;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ff-dlq-item__summary {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ff-dlq-item__meta {
+  color: var(--muted);
+  font-size: 0.8em;
+}
+
+.ff-dlq-item__error {
+  color: #ef476f;
+  font-size: 0.8em;
+  word-break: break-word;
+}
+
+.ff-dlq-item button {
+  align-self: flex-start;
+  color: #3ddc84;
+  border-color: #3ddc84;
+  background: #10241a;
+}
