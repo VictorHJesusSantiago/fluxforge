@@ -1,0 +1,18 @@
+{
+  "name": "@fluxforge/node-filter",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Keeps only the items matching a single-field condition, dropping the rest, on one output port.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "dependencies": {
+    "@fluxforge/sdk": "0.1.0"
+  }
+}
