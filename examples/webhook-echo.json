@@ -1,0 +1,31 @@
+{
+  "name": "Webhook echo",
+  "definition": {
+    "id": "example-webhook-echo",
+    "name": "Webhook echo",
+    "nodes": [
+      {
+        "id": "trigger",
+        "type": "trigger.webhook",
+        "params": { "path": "/hooks/echo", "method": "POST" },
+        "metadata": { "x": 40, "y": 40 }
+      },
+      {
+        "id": "tag",
+        "type": "data.set",
+        "params": { "set": { "handledBy": "FluxForge" }, "remove": [] },
+        "metadata": { "x": 300, "y": 40 }
+      },
+      {
+        "id": "respond",
+        "type": "utility.respond-to-webhook",
+        "params": { "statusCode": 200, "body": { "ok": true } },
+        "metadata": { "x": 560, "y": 40 }
+      }
+    ],
+    "edges": [
+      { "from": "trigger", "to": "tag" },
+      { "from": "tag", "to": "respond" }
+    ]
+  }
+}

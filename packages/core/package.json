@@ -1,0 +1,12 @@
+{
+  "name": "@fluxforge/core",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The DAG executor: graph compilation/validation, topological scheduling, retry/backoff, partial-execution resume. No dependency on any node runtime, the queue, or the server.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": ["src", "dist"]
+}

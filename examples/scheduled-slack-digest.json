@@ -1,0 +1,34 @@
+{
+  "name": "Scheduled Slack digest",
+  "definition": {
+    "id": "example-scheduled-slack-digest",
+    "name": "Scheduled Slack digest",
+    "nodes": [
+      {
+        "id": "schedule",
+        "type": "trigger.cron",
+        "params": { "expression": "0 9 * * *", "timezone": "UTC" },
+        "metadata": { "x": 40, "y": 40 }
+      },
+      {
+        "id": "feed",
+        "type": "integration.rss-read",
+        "params": { "url": "https://example.com/feed.xml" },
+        "metadata": { "x": 300, "y": 40 }
+      },
+      {
+        "id": "announce",
+        "type": "integration.slack-webhook",
+        "params": {
+          "webhookUrl": "https://hooks.slack.com/services/REPLACE/ME/WITH-A-REAL-WEBHOOK",
+          "text": "Daily digest run complete — check the feed for anything new."
+        },
+        "metadata": { "x": 560, "y": 40 }
+      }
+    ],
+    "edges": [
+      { "from": "schedule", "to": "feed" },
+      { "from": "feed", "to": "announce" }
+    ]
+  }
+}
