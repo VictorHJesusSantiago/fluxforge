@@ -1,0 +1,18 @@
+{
+  "name": "@fluxforge/node-google-sheets-append",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Appends a row to a Google Sheet via the Sheets API v4 values.append endpoint.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "dependencies": {
+    "@fluxforge/sdk": "0.1.0"
+  }
+}
