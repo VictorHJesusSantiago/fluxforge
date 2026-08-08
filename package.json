@@ -1,0 +1,42 @@
+{
+  "name": "fluxforge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An open-source workflow automation engine: a DAG executor with retry/backoff and partial re-execution, a persistent job queue, a pluggable node system with a third-party SDK, and a canvas-based visual workflow editor.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/queue",
+    "packages/sdk",
+    "packages/registry",
+    "packages/server",
+    "packages/editor",
+    "packages/nodes/*"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.json",
+    "build:clean": "tsc -b tsconfig.json --clean",
+    "typecheck": "tsc -b tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "check": "npm run lint && npm run build && npm run test",
+    "scaffold:node": "node scripts/scaffold-node.mjs",
+    "dev:server": "npm run dev --workspace @fluxforge/server",
+    "dev:editor": "npm run dev --workspace @fluxforge/editor"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "eslint": "^9.17.0",
+    "playwright": "^1.62.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.0",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.8"
+  }
+}
