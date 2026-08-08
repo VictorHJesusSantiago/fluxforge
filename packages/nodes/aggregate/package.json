@@ -1,0 +1,18 @@
+{
+  "name": "@fluxforge/node-aggregate",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Collapses input items into a summary item (or one per groupBy value) of sum/count/avg/min/max over a numeric field.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "dependencies": {
+    "@fluxforge/sdk": "0.1.0"
+  }
+}
