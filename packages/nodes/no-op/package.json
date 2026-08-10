@@ -1,0 +1,18 @@
+{
+  "name": "@fluxforge/node-no-op",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Passes the main input through unchanged; a placeholder node for workflows still being built.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "dependencies": {
+    "@fluxforge/sdk": "0.1.0"
+  }
+}
