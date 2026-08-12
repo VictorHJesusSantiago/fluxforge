@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src"],
+  "exclude": ["src/**/__tests__/**"],
+  "references": [
+    { "path": "../core" },
+    { "path": "../queue" },
+    { "path": "../sdk" },
+    { "path": "../registry" },
+    { "path": "../nodes/if" },
+    { "path": "../nodes/http-request" },
+    { "path": "../nodes/manual" },
+    { "path": "../nodes/cron" },
+    { "path": "../nodes/webhook" },
+    { "path": "../nodes/switch" },
+    { "path": "../nodes/filter" },
+    { "path": "../nodes/set" },
+    { "path": "../nodes/aggregate" },
+    { "path": "../nodes/code" },
+    { "path": "../nodes/no-op" },
+    { "path": "../nodes/respond-to-webhook" },
+    { "path": "../nodes/slack-webhook" },
+    { "path": "../nodes/discord-webhook" },
+    { "path": "../nodes/github-issue" },
+    { "path": "../nodes/rss-read" },
+    { "path": "../nodes/google-sheets-append" }
+  ]
+}

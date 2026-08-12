@@ -1,0 +1,49 @@
+{
+  "name": "@fluxforge/server",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The HTTP server: workflow CRUD, run execution (direct and queued), webhook receiving, cron scheduling, and encrypted-at-rest credential storage.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@fluxforge/core": "0.1.0",
+    "@fluxforge/queue": "0.1.0",
+    "@fluxforge/registry": "0.1.0",
+    "@fluxforge/sdk": "0.1.0",
+    "@fluxforge/node-if": "0.1.0",
+    "@fluxforge/node-http-request": "0.1.0",
+    "@fluxforge/node-manual": "0.1.0",
+    "@fluxforge/node-cron": "0.1.0",
+    "@fluxforge/node-webhook": "0.1.0",
+    "@fluxforge/node-switch": "0.1.0",
+    "@fluxforge/node-filter": "0.1.0",
+    "@fluxforge/node-set": "0.1.0",
+    "@fluxforge/node-aggregate": "0.1.0",
+    "@fluxforge/node-code": "0.1.0",
+    "@fluxforge/node-no-op": "0.1.0",
+    "@fluxforge/node-respond-to-webhook": "0.1.0",
+    "@fluxforge/node-slack-webhook": "0.1.0",
+    "@fluxforge/node-discord-webhook": "0.1.0",
+    "@fluxforge/node-github-issue": "0.1.0",
+    "@fluxforge/node-rss-read": "0.1.0",
+    "@fluxforge/node-google-sheets-append": "0.1.0",
+    "better-sqlite3": "^13.0.3",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/express": "^4.17.25",
+    "tsx": "^4.23.9"
+  }
+}
