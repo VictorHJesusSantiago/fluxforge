@@ -1,0 +1,16 @@
+{
+  "name": "@fluxforge/registry",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Collects NodeDefinitions (built-in or third-party) and exposes them as a NodeRunnerResolver for the executor, and as a listing for the editor's node palette.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": ["src", "dist"],
+  "dependencies": {
+    "@fluxforge/core": "0.1.0",
+    "@fluxforge/sdk": "0.1.0"
+  }
+}
