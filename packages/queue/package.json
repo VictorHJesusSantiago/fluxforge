@@ -1,0 +1,19 @@
+{
+  "name": "@fluxforge/queue",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A persistent job queue on SQLite: visibility-timeout claims, backoff-scheduled retries, dead-lettering, and a small poll-loop worker.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": ["src", "dist"],
+  "dependencies": {
+    "@fluxforge/core": "0.1.0",
+    "better-sqlite3": "^13.0.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0"
+  }
+}
