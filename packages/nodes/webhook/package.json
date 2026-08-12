@@ -1,0 +1,18 @@
+{
+  "name": "@fluxforge/node-webhook",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Declares that a workflow starts when an HTTP request hits a URL; passes through whatever the server seeded from the parsed request.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "dependencies": {
+    "@fluxforge/sdk": "0.1.0"
+  }
+}
