@@ -29,7 +29,6 @@ async function waitForServer(url) {
       const res = await fetch(url);
       if (res.ok || res.status === 404) return;
     } catch {
-      // not up yet
     }
     await delay(500);
   }
@@ -75,22 +74,16 @@ async function main() {
     await page.goto(editorUrl);
     await page.waitForSelector('.ff-palette__item', { timeout: 10_000 });
 
-    // 1. Add a "Manual Trigger" node and a "Set" node via the palette.
     await page.click('.ff-palette__item:has-text("Manual Trigger")');
     await page.click('.ff-palette__item:has-text("Set")');
     const nodeCount = await page.evaluate(() => document.querySelectorAll('canvas').length);
     console.log(`OK  canvas present: ${nodeCount === 1}`);
 
-    // 2. Read back node screen positions via a debug hook is overkill — instead drag from a
-    //    fixed point where the trigger node's output port renders (cascade places node 1 at
-    //    (40,40) local, node 2 at (64,64) local, offset by the app's pan (260,40)).
     const canvasBox = await page.locator('#canvas').boundingBox();
     if (canvasBox === null) throw new Error('canvas has no bounding box');
 
-    // Trigger node: metadata {x:40,y:40}, single output port at (40+180, 40+28+12) local -> plus pan(260,40).
     const fromX = canvasBox.x + 260 + 40 + 180;
     const fromY = canvasBox.y + 40 + 40 + 28 + 12;
-    // Set node: metadata {x:64,y:64}, single input port at (64, 64+28+12) local -> plus pan.
     const toX = canvasBox.x + 260 + 64;
     const toY = canvasBox.y + 40 + 64 + 28 + 12;
 
@@ -99,7 +92,6 @@ async function main() {
     await page.mouse.move(toX, toY, { steps: 10 });
     await page.mouse.up();
 
-    // 3. Select the Set node (click its body) and fill in a param via the property panel.
     const setNodeBodyX = canvasBox.x + 260 + 64 + 90;
     const setNodeBodyY = canvasBox.y + 40 + 64 + 10;
     await page.mouse.click(setNodeBodyX, setNodeBodyY);
@@ -109,7 +101,6 @@ async function main() {
     await setField.fill('{"greeting":"hello from playwright"}');
     await setField.dispatchEvent('change');
 
-    // 4. Save, then run, and wait for the live status text to report completion.
     await page.fill('#workflow-name', 'E2E Smoke Test');
     await page.click('#btn-save');
     await page.waitForFunction(() => document.getElementById('status')?.textContent?.includes('Saved'), { timeout: 5000 });
@@ -121,24 +112,19 @@ async function main() {
     const workflowId = url.searchParams.get('workflow');
     console.log(`OK  workflow saved and run, id=${workflowId}`);
 
-    // 5. Pan and zoom: drag the empty canvas background, then scroll to zoom. The precise
-    //    geometry of where a click lands afterward is `layout.ts`/`hit-test.ts`'s job (unit
-    //    tested exhaustively, including the exact zoom-tolerance math) — this step only proves
-    //    the real mouse/wheel event listeners are wired up on the real canvas with no exception.
     const emptySpotX = canvasBox.x + canvasBox.width - 40;
     const emptySpotY = canvasBox.y + canvasBox.height - 40;
     await page.mouse.move(emptySpotX, emptySpotY);
     await page.mouse.down();
     await page.mouse.move(emptySpotX - 60, emptySpotY - 30, { steps: 5 });
     await page.mouse.up();
-    await page.mouse.wheel(0, -200); // zoom in, centred wherever the cursor last was
+    await page.mouse.wheel(0, -200);
     const pageErrors = [];
     page.on('pageerror', (err) => pageErrors.push(err));
     await delay(100);
     console.log(`OK  pan-drag and zoom-wheel gestures completed with no page error (${pageErrors.length} errors)`);
     if (pageErrors.length > 0) throw new Error(`pan/zoom threw: ${pageErrors[0]}`);
 
-    // 6. Credentials panel: open it, add a credential, confirm it's listed, delete it.
     await page.click('#btn-credentials');
     await page.waitForSelector('.ff-modal-overlay:not([hidden]) .ff-modal', { timeout: 5000 });
     await page.fill('.ff-cred-name', 'test-cred');
@@ -159,7 +145,6 @@ async function main() {
     console.log('OK  credentials panel: deleted via UI');
     await page.click('.ff-modal-overlay:not([hidden]) .ff-modal__close');
 
-    // 7. Dead-letter panel: open it and confirm it renders the real (empty) state from the server.
     await page.click('#btn-dead-letter');
     await page.waitForSelector('.ff-modal-overlay:not([hidden]) .ff-modal', { timeout: 5000 });
     const dlqEmptyText = await page.evaluate(() => document.querySelector('.ff-dlq-empty')?.textContent);
@@ -169,7 +154,6 @@ async function main() {
 
     await browser.close();
 
-    // 8. Verify against the server's own API — the real source of truth, not the page's claim.
     const workflow = await (await fetch(`${serverUrl}/api/workflows/${workflowId}`)).json();
     console.log(`OK  server has ${workflow.nodes.length} nodes and ${workflow.edges.length} edge(s)`);
     if (workflow.nodes.length !== 2 || workflow.edges.length !== 1) {
@@ -193,9 +177,6 @@ async function main() {
   } finally {
     server.kill();
     editorServer.kill();
-    // The server process may still hold its SQLite WAL files open for a moment after `kill()`
-    // returns (the signal is delivered async) — a few retries with a short backoff clears this
-    // reliably without the arbitrary-feeling fixed delay a single retry would need.
     for (let attempt = 0; attempt < 5; attempt += 1) {
       try {
         rmSync(dbDir, { recursive: true, force: true });

@@ -200,10 +200,6 @@ body {
   z-index: 10;
 }
 
-/* An author stylesheet's `display` always wins over the UA default `[hidden] { display: none }`
-   rule at equal specificity — without this, setting the `hidden` attribute stops the overlay
-   from being *drawn* as visible in some situations but does not stop it from being laid out and
-   intercepting clicks across the whole viewport, since `display: flex` above still applies. */
 .ff-modal-overlay[hidden] {
   display: none;
 }
