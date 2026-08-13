@@ -125,7 +125,6 @@ function matchesDay(parsed: ParsedCron, dayOfMonth: number, dayOfWeek: number): 
   if (parsed.dayOfMonth.wildcard && parsed.dayOfWeek.wildcard) return true;
   if (parsed.dayOfMonth.wildcard) return dowMatch;
   if (parsed.dayOfWeek.wildcard) return domMatch;
-  // Both restricted: standard cron OR semantics.
   return domMatch || dowMatch;
 }
 
@@ -144,10 +143,10 @@ export function nextFireTime(expression: string, after: Date): Date {
     after.getUTCDate(),
     after.getUTCHours(),
     after.getUTCMinutes(),
-  ) + 60_000); // truncate to the minute, then move to the next one
+  ) + 60_000);
 
   const startYear = after.getUTCFullYear();
-  const maxYear = startYear + 5; // safety cap — a schedule that never matches within 5 years is malformed
+  const maxYear = startYear + 5;
 
   for (;;) {
     if (t.getUTCFullYear() > maxYear) {

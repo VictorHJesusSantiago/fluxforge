@@ -96,15 +96,13 @@ describe('nextFireTime', () => {
   });
 
   it('a day-of-week restriction skips the weekend (2026-08-06 is a Thursday)', () => {
-    // Friday 2026-08-07 09:05 -> next weekday 9am fire is Monday 2026-08-10.
     const after = new Date('2026-08-07T09:05:00.000Z');
     const next = nextFireTime('0 9 * * 1-5', after);
     expect(next.toISOString()).toBe('2026-08-10T09:00:00.000Z');
-    expect(next.getUTCDay()).toBe(1); // Monday
+    expect(next.getUTCDay()).toBe(1);
   });
 
   it('a day-of-week restriction fires same day if the time has not yet passed', () => {
-    // 2026-08-06 is a Thursday (day 4), within 1-5.
     const after = new Date('2026-08-06T00:00:00.000Z');
     const next = nextFireTime('0 9 * * 1-5', after);
     expect(next.toISOString()).toBe('2026-08-06T09:00:00.000Z');
@@ -123,16 +121,12 @@ describe('nextFireTime', () => {
   });
 
   it('handles a schedule pinned to Feb 29, skipping non-leap years', () => {
-    // 2026 and 2027 are not leap years; next Feb 29 after 2026-03-01 is 2028-02-29.
     const after = new Date('2026-03-01T00:00:00.000Z');
     const next = nextFireTime('0 0 29 2 *', after);
     expect(next.toISOString()).toBe('2028-02-29T00:00:00.000Z');
   });
 
   it('applies OR semantics when both day-of-month and day-of-week are restricted', () => {
-    // Fires on the 1st of the month OR every Monday — not only Mondays that are the 1st.
-    // 2026-08-06 is a Thursday; the next Monday is 2026-08-10, which comes before day-of-month 1
-    // of the next month (2026-09-01).
     const after = new Date('2026-08-06T00:00:00.000Z');
     const next = nextFireTime('0 0 1 * 1', after);
     expect(next.toISOString()).toBe('2026-08-10T00:00:00.000Z');
