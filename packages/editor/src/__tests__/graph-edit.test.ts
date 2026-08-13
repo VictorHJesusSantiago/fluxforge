@@ -83,7 +83,7 @@ describe('addEdge / removeEdge', () => {
 
   it('does not add a duplicate of an identical edge (same ports)', () => {
     const workflow = wf({ edges: [{ from: 'a', to: 'b', fromPort: 'main', toPort: 'main' }] });
-    const updated = addEdge(workflow, { from: 'a', to: 'b' }); // default ports resolve to the same "main"
+    const updated = addEdge(workflow, { from: 'a', to: 'b' });
     expect(updated.edges).toHaveLength(1);
   });
 

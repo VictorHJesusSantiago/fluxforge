@@ -21,14 +21,14 @@ describe('describeFields', () => {
     expect(byName.method?.kind).toBe('enum');
     expect(byName.timeout?.kind).toBe('number');
     expect(byName.enabled?.kind).toBe('boolean');
-    expect(byName.body?.kind).toBe('json'); // no type info at all — the honest fallback
+    expect(byName.body?.kind).toBe('json');
   });
 
   it('a field with a schema default is never "required", even if listed in the schema\'s required array', () => {
     const fields = describeFields(schema, {});
     const byName = Object.fromEntries(fields.map((f) => [f.name, f]));
     expect(byName.method?.required).toBe(false);
-    expect(byName.url?.required).toBe(true); // no default, and genuinely required
+    expect(byName.url?.required).toBe(true);
   });
 
   it('uses the schema default as the current value when none is set yet', () => {

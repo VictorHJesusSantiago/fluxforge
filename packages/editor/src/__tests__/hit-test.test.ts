@@ -40,7 +40,6 @@ describe('hitTestPort', () => {
   });
 
   it('prefers a port over a node body when both are technically under the point', () => {
-    // A port sits exactly on its node's edge, inside the body's own bounding box.
     const port = layoutA.outputs[0]!;
     const hit = hitTestPort([layoutA], { x: port.x, y: port.y });
     expect(hit).not.toBeUndefined();
