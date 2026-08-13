@@ -65,13 +65,13 @@ describe('CronScheduler', () => {
       onDue: (wfId, nodeId) => due.push([wfId, nodeId]),
     });
 
-    scheduler.tick(); // schedules for 00:01:00
+    scheduler.tick();
     currentTime = new Date('2026-01-01T00:01:05.000Z');
-    scheduler.tick(); // now past due — fires
+    scheduler.tick();
     expect(due).toEqual([['wf1', 'trig']]);
 
     currentTime = new Date('2026-01-01T00:01:06.000Z');
-    scheduler.tick(); // already rescheduled for 00:02:00 — not due yet
+    scheduler.tick();
     expect(due).toEqual([['wf1', 'trig']]);
   });
 

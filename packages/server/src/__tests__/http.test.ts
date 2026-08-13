@@ -186,7 +186,7 @@ describe('credentials', () => {
     const listRes = await fetch(`${baseUrl}/api/credentials`);
     const list = (await listRes.json()) as string[];
     expect(list).toEqual(['slack']);
-    expect(JSON.stringify(list)).not.toContain('hooks.slack.com'); // names only, never values
+    expect(JSON.stringify(list)).not.toContain('hooks.slack.com');
 
     await fetch(`${baseUrl}/api/credentials/slack`, { method: 'DELETE' });
     expect((await (await fetch(`${baseUrl}/api/credentials`)).json())).toEqual([]);

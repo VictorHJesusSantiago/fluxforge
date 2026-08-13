@@ -12,10 +12,6 @@ afterEach(() => {
   queue.close();
 });
 
-// A same-tick microtask (`Promise.resolve()`) would never yield to the macrotask queue when the
-// worker loop is idle-polling — it would win a livelock against the event loop's timer phase
-// forever, starving out every `setTimeout` in the test (including `vi.waitFor`'s own polling and
-// `worker.stop()`'s wait for the loop to notice `stopped`). A zero-delay real timer still yields.
 const instantSleep = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 describe('QueueWorker', () => {
@@ -31,7 +27,6 @@ describe('QueueWorker', () => {
     );
 
     worker.start();
-    // Give the loop a few real microtask/timer turns to actually process the one job.
     await vi.waitFor(() => expect(queue.getJob(id)?.status).toBe('done'));
     await worker.stop();
 
@@ -71,7 +66,7 @@ describe('QueueWorker', () => {
     );
 
     worker.start();
-    await new Promise((r) => setTimeout(r, 5)); // let it claim and start the handler
+    await new Promise((r) => setTimeout(r, 5));
     await worker.stop();
 
     expect(finished).toBe(true);

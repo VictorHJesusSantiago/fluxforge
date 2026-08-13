@@ -17,7 +17,7 @@ describe('WorkflowStore', () => {
   it('save() generates an id when none is given, and get() round-trips the definition', () => {
     const id = store.save({ name: 'My Flow', definition: def('placeholder') });
     expect(id).toBeTruthy();
-    expect(store.get(id).name).toBe('test'); // the definition's own id/name fields are preserved verbatim
+    expect(store.get(id).name).toBe('test');
   });
 
   it('get() throws WorkflowNotFoundError for a missing id', () => {

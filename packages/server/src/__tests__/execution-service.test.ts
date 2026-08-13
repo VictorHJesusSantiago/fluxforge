@@ -115,7 +115,6 @@ describe('ExecutionService.resume', () => {
     const service = new ExecutionService(registry, runStore, workflowStore, { getCredential: () => undefined });
     const full = await service.execute(workflowId, [{ n: 2 }]);
 
-    // Simulate a crash: node b never finished.
     const crashed = { ...full, status: 'running' as const, nodes: { ...full.nodes, b: { status: 'pending' as const, attempts: 0 } } };
     runStore.save(crashed);
 
