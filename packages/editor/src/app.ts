@@ -133,9 +133,6 @@ export class EditorApp {
       return;
     }
 
-    // A fixed *screen*-pixel tolerance, converted to world units by dividing by zoom — otherwise
-    // an edge gets harder to click when zoomed out and comically easy when zoomed in, since the
-    // hit test runs in the same world space the click point was already converted into.
     const edgeIndex = hitTestEdge(layouts, this.workflow.edges, point, 6 / this.zoom);
     if (edgeIndex !== undefined) {
       this.selectedNodeId = undefined;
@@ -145,9 +142,6 @@ export class EditorApp {
       return;
     }
 
-    // Clicked empty canvas: deselect and start a pan drag, exactly like every other node-graph
-    // editor's "drag the background to pan" gesture — no modifier key required, since nothing
-    // else claims a plain click-and-drag on empty space.
     this.selectedNodeId = undefined;
     this.selectedEdgeIndex = undefined;
     this.propertyPanel.showEmpty();
@@ -161,7 +155,7 @@ export class EditorApp {
     if (this.panning !== undefined) {
       this.pan.x = this.panning.startPanX + (e.clientX - this.panning.startClientX);
       this.pan.y = this.panning.startPanY + (e.clientY - this.panning.startClientY);
-      this.pointer = this.toWorldPoint(e.clientX, e.clientY); // pan just moved the world under the cursor
+      this.pointer = this.toWorldPoint(e.clientX, e.clientY);
       this.rerender();
       return;
     }
@@ -205,7 +199,7 @@ export class EditorApp {
   private onKeyDown(e: KeyboardEvent): void {
     const target = e.target;
     if (target instanceof HTMLElement && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT')) {
-      return; // typing in the property panel must not also delete the node being edited
+      return;
     }
     if (e.key !== 'Delete' && e.key !== 'Backspace') return;
 
@@ -228,8 +222,6 @@ export class EditorApp {
     const info = this.nodeTypes.get(type);
     if (info === undefined) return;
     const id = crypto.randomUUID();
-    // Cascades new nodes diagonally so repeatedly clicking the palette doesn't stack them
-    // exactly on top of each other, which would make the newest one impossible to grab.
     const cascade = (this.workflow.nodes.length % 8) * 24;
     this.workflow = addNode(this.workflow, { id, type, params: {}, metadata: { x: 40 + cascade, y: 40 + cascade } });
     this.selectedNodeId = id;

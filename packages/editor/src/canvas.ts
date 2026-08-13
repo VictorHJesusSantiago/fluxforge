@@ -90,7 +90,7 @@ export function render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement,
 function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, pan: { x: number; y: number }, zoom: number): void {
   const spacing = 24;
   ctx.strokeStyle = '#1a1d24';
-  ctx.lineWidth = 1 / zoom; // stays a hairline on screen regardless of zoom, since ctx.scale would otherwise scale it too
+  ctx.lineWidth = 1 / zoom;
   ctx.beginPath();
   const left = -pan.x / zoom;
   const top = -pan.y / zoom;

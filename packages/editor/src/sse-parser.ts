@@ -15,8 +15,6 @@ export interface SseParseResult<T> {
 export function parseSseChunk<T>(buffer: string, newChunk: string): SseParseResult<T> {
   const combined = buffer + newChunk;
   const parts = combined.split('\n\n');
-  // The last part is either empty (the buffer ended exactly on an event boundary) or an
-  // incomplete event still waiting on more bytes — either way, it is not yet a complete event.
   const remainder = parts.pop() ?? '';
 
   const events: T[] = [];
@@ -27,8 +25,6 @@ export function parseSseChunk<T>(buffer: string, newChunk: string): SseParseResu
       try {
         events.push(JSON.parse(json) as T);
       } catch {
-        // A malformed line is dropped, not thrown — one bad event should not take down the
-        // whole live-progress view for the rest of the run.
       }
     }
   }

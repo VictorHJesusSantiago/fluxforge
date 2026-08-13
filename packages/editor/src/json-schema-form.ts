@@ -70,7 +70,7 @@ function fieldKind(prop: JsonSchemaProperty): FieldKind {
     case 'boolean':
       return 'boolean';
     default:
-      return 'json'; // object/array/unknown — rendered as a raw JSON textarea, honestly labelled as such
+      return 'json';
   }
 }
 
