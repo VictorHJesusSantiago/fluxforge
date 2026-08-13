@@ -18,8 +18,6 @@ describe('trigger.manual node', () => {
   });
 
   it('rejects unknown params (schema takes no fields)', async () => {
-    // extra keys are simply ignored by default zod object parsing, not rejected — assert that
-    // the accepted shape really is the empty object rather than assuming strictness.
     const output = await runNode(manualNode, { unexpected: true }, { main: [{ x: 1 }] });
     expect(output.main).toEqual([{ x: 1 }]);
   });

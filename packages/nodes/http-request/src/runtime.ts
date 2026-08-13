@@ -35,10 +35,6 @@ export const httpRequestNode = defineNode({
     const items: WorkflowItem[] = ctx.input.main !== undefined && ctx.input.main.length > 0 ? ctx.input.main : [{}];
     const bearerToken = ctx.params.credential === undefined ? undefined : ctx.getCredential(ctx.params.credential)?.token;
 
-    // One request per input item — but `params` (and therefore the URL/body) is the same for
-    // every item; there is no per-item templating here (e.g. "insert `item.id` into the URL").
-    // That's `data.set`'s and an eventual expression-language node's job, not this one's — kept
-    // out deliberately rather than half-built.
     const results: WorkflowItem[] = [];
     for (const _item of items) {
       const { url, init } = buildRequest(ctx.params, bearerToken);
