@@ -35,7 +35,7 @@ describe('calculateBackoffDelay', () => {
       jitter: true,
     };
     expect(calculateBackoffDelay(3, policy, () => 0)).toBe(0);
-    expect(calculateBackoffDelay(3, policy, () => 1)).toBe(400); // 100 * 2^2 = 400, under the cap
+    expect(calculateBackoffDelay(3, policy, () => 1)).toBe(400);
     expect(calculateBackoffDelay(3, policy, () => 0.5)).toBe(200);
   });
 

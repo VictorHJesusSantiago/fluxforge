@@ -79,9 +79,6 @@ function topologicalSort(
   for (const [id, degree] of inDegree) {
     if (degree === 0) queue.push(id);
   }
-  // Sorted so the resulting order is deterministic across runs with the same graph — otherwise
-  // two runs of an identical workflow could interleave independent branches differently, which
-  // makes a flaky test look like a real bug.
   queue.sort();
 
   const order: string[] = [];

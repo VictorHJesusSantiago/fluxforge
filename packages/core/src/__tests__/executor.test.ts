@@ -24,7 +24,7 @@ function testOptions(resolver: NodeRunnerResolver, overrides: Partial<Parameters
   void overrides;
   return {
     resolver,
-    sleep: async () => {}, // instant — retry-timing correctness is backoff.test.ts's job
+    sleep: async () => {},
     random: () => 0.5,
   };
 }
@@ -108,8 +108,6 @@ describe('WorkflowExecutor — branch skipping', () => {
     expect(state.nodes.onTrue?.status).toBe('succeeded');
     expect(state.nodes.onFalse?.status).toBe('skipped');
     expect(state.nodes.afterFalse?.status).toBe('skipped');
-    // The unreached branch's node runner must never actually be invoked — "skipped" means
-    // skipped, not "run with empty input."
     expect(resolver.calls).not.toContain('onFalse');
     expect(resolver.calls).not.toContain('afterFalse');
   });
@@ -366,7 +364,6 @@ describe('WorkflowExecutor — partial execution / resume', () => {
     const full = await executor.run('run13', [{ v: 1 }]);
     expect(resolver.calls).toEqual(['a', 'b', 'c']);
 
-    // Simulate a crash: node "c" never got to run.
     const crashed = { ...full, status: 'running' as const, nodes: { ...full.nodes, c: { status: 'pending' as const, attempts: 0 } } };
 
     const resolver2 = new TestResolver({ pass: passThrough });
@@ -374,7 +371,6 @@ describe('WorkflowExecutor — partial execution / resume', () => {
     const resumed = await executor2.resume(crashed, [{ v: 1 }]);
 
     expect(resumed.status).toBe('succeeded');
-    // Only "c" should have actually run on the resumed executor — "a" and "b" are reused.
     expect(resolver2.calls).toEqual(['c']);
     expect(resumed.nodes.c?.output?.main).toEqual([{ v: 1 }]);
   });
