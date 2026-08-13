@@ -144,9 +144,6 @@ export class PersistentQueue {
 
       const nextAttempts = row.attempts + 1;
       if (nextAttempts > row.max_attempts) {
-        // Redelivered more times than allowed without ever being acked — dead-letter it here
-        // rather than handing it to yet another worker. Not claimed; loop the caller can call
-        // claim() again for the next candidate.
         this.db
           .prepare(`UPDATE jobs SET status = 'dead', attempts = @attempts, updated_at = @now WHERE id = @id`)
           .run({ id: row.id, attempts: nextAttempts, now });

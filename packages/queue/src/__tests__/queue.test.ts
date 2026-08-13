@@ -7,9 +7,6 @@ let queue: PersistentQueue;
 
 beforeEach(() => {
   clock = 1_000_000;
-  // ":memory:" per-instance still persists across the connection's lifetime (this is exactly
-  // what makes the class useful — the same connection is what the real deployment reopens
-  // against a file path), so this exercises real SQLite, not a fake.
   queue = new PersistentQueue(':memory:', { now, idGenerator: (() => {
     let n = 0;
     return () => `job-${(n += 1)}`;
@@ -68,7 +65,6 @@ describe('visibility timeout — crash recovery', () => {
     const first = queue.claim(1000);
     expect(first?.id).toBe(id);
 
-    // Still within the visibility window — invisible to other workers.
     expect(queue.claim(1000)).toBeUndefined();
 
     clock += 1001;
@@ -88,13 +84,11 @@ describe('visibility timeout — crash recovery', () => {
 
   it('a job exceeding maxAttempts via repeated crash-redelivery is auto-dead-lettered by claim()', () => {
     const id = queue.enqueue('t', {}, { maxAttempts: 2 });
-    queue.claim(100); // attempt 1
+    queue.claim(100);
     clock += 101;
-    queue.claim(100); // attempt 2
+    queue.claim(100);
     clock += 101;
 
-    // A third redelivery would be attempt 3 > maxAttempts 2 — claim() dead-letters it inline
-    // and returns undefined instead of handing it to a worker for the third time.
     expect(queue.claim(100)).toBeUndefined();
     expect(queue.getJob(id)?.status).toBe('dead');
   });
@@ -110,7 +104,6 @@ describe('fail() — retry scheduling and dead-lettering', () => {
     expect(queue.getJob(id)?.status).toBe('pending');
     expect(queue.getJob(id)?.lastError).toBe('boom');
 
-    // Not yet visible — the backoff delay hasn't elapsed.
     expect(queue.claim(1000)).toBeUndefined();
     clock += 500;
     expect(queue.claim(1000)?.id).toBe(id);
@@ -149,9 +142,9 @@ describe('countByStatus', () => {
     const b = queue.enqueue('t', {}, { maxAttempts: 1 });
     queue.enqueue('t', {});
 
-    queue.claim(1000); // claims a (FIFO)
+    queue.claim(1000);
     queue.complete(a);
-    queue.claim(1000); // claims b
+    queue.claim(1000);
     queue.fail(b, 'dead now');
 
     expect(queue.countByStatus('done')).toBe(1);
