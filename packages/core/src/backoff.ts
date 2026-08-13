@@ -24,7 +24,5 @@ export function calculateBackoffDelay(
   const capped = policy.maxDelayMs === undefined ? raw : Math.min(raw, policy.maxDelayMs);
 
   if (!policy.jitter) return capped;
-  // Full jitter: uniform in [0, capped]. Cheaper backoff schemes (jitter around the midpoint)
-  // still synchronise retries under correlated failures; full jitter is what actually decorrelates.
   return random() * capped;
 }

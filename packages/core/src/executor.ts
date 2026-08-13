@@ -160,8 +160,6 @@ export class WorkflowExecutor {
       }
 
       if (node.disabled) {
-        // A disabled node passes its input straight through on `main` — useful for temporarily
-        // no-op-ing a step in the editor without rewiring every edge around it.
         nodeStates.set(node.id, {
           status: 'succeeded',
           attempts: 0,
@@ -258,8 +256,6 @@ export class WorkflowExecutor {
       for (const id of readyIds) {
         if (running.size >= this.concurrency) break;
         const node = this.graph.nodesById.get(id)!;
-        // Claim it immediately (not just after the async work starts) so a second pass through
-        // this loop before the microtask queue drains cannot schedule the same node twice.
         nodeStates.set(id, { status: 'running', attempts: nodeStates.get(id)!.attempts });
         const task = runOneNode(node).finally(() => {
           running.delete(task);
@@ -268,12 +264,6 @@ export class WorkflowExecutor {
       }
 
       if (running.size === 0) {
-        // Nothing ready and nothing running, but pending nodes remain — every remaining node is
-        // waiting on something that will never finish (a dependency itself stuck pending, which
-        // `compileGraph`'s cycle check already rules out) or, more mundanely, is genuinely stuck
-        // because everything it depends on already failed/skipped and it still shows pending —
-        // this only happens if `isReady` and `isTerminal` disagree, which would be a bug in this
-        // file, not a legitimate workflow state. Fail loudly rather than spin forever.
         throw new Error(
           `WorkflowExecutor: deadlock — ${pendingIds.length} node(s) pending with none ready and none running`,
         );

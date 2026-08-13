@@ -13,9 +13,6 @@ const alias: Record<string, string> = {
   '@fluxforge/registry': pkg('registry'),
 };
 
-// Every packages/nodes/<name> folder aliases to @fluxforge/node-<name> — discovered rather than
-// hand-listed, since the whole point of the node system is that adding one is "create a folder,"
-// not "also remember to edit three config files."
 const nodesDir = `${root}packages/nodes`;
 if (existsSync(nodesDir)) {
   for (const entry of readdirSync(nodesDir, { withFileTypes: true })) {
