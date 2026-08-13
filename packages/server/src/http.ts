@@ -31,7 +31,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
   const executionServiceFor = (credentials: CredentialStore) =>
     new ExecutionService(registry, runStore, workflowStore, credentials);
 
-  // --- Node registry (for the editor's palette and property panel) ------------------------------
   app.get('/api/nodes', (_req, res) => {
     res.json(
       registry.list().map((def) => ({
@@ -42,15 +41,11 @@ export function createHttpApp(deps: HttpAppDeps): Express {
         icon: def.icon,
         inputs: def.inputs,
         outputs: def.outputs,
-        // zod v4's own JSON Schema converter — a real, standard interchange format, not a
-        // bespoke one, is what lets the editor render a property form for a node type it has
-        // never seen the TypeScript definition of (including a third party's).
         paramsSchema: z.toJSONSchema(def.paramsSchema),
       })),
     );
   });
 
-  // --- Workflow CRUD ----------------------------------------------------------------------------
   app.get('/api/workflows', (_req, res) => {
     res.json(workflowStore.list());
   });
@@ -93,7 +88,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     res.json(runStore.listForWorkflow(req.params.id as string));
   });
 
-  // --- Run a workflow now, streaming live progress over SSE -------------------------------------
   app.post('/api/workflows/:id/run', async (req: Request, res: Response) => {
     const workflowId = req.params.id as string;
     if (workflowStore.tryGet(workflowId) === undefined) {
@@ -123,7 +117,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     }
   });
 
-  // --- Enqueue a run for the background worker (used by the cron scheduler) --------------------
   app.post('/api/workflows/:id/enqueue', (req: Request, res: Response) => {
     const workflowId = req.params.id as string;
     if (workflowStore.tryGet(workflowId) === undefined) {
@@ -135,7 +128,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     res.status(202).json({ jobId });
   });
 
-  // --- Run status ---------------------------------------------------------------------------------
   app.get('/api/runs/:id', (req: Request, res: Response) => {
     const state = runStore.get(req.params.id as string);
     if (state === undefined) {
@@ -154,7 +146,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     }
   });
 
-  // --- Credentials ----------------------------------------------------------------------------
   app.get('/api/credentials', (_req, res) => {
     res.json(credentialStore.list());
   });
@@ -169,7 +160,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     res.status(204).end();
   });
 
-  // --- Dead-letter queue ------------------------------------------------------------------------
   app.get('/api/dead-letter', (_req, res) => {
     res.json(queue.deadLetter());
   });
@@ -179,7 +169,6 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     res.status(204).end();
   });
 
-  // --- Webhook receiver: catches every method/path not matched above ---------------------------
   app.all(/.*/, async (req: Request, res: Response) => {
     const workflows = workflowStore.list().map((w) => workflowStore.get(w.id));
     const match = findWebhookTarget(workflows, req.path, req.method);
@@ -189,7 +178,7 @@ export function createHttpApp(deps: HttpAppDeps): Express {
     }
 
     const runId = randomUUID();
-    void runId; // surfaced via the response body below for the caller's own correlation, not used internally
+    void runId;
     try {
       const state = await executionServiceFor(credentialStore).execute(match.workflowId, [
         { ...(typeof req.body === 'object' && req.body !== null ? req.body : {}), query: req.query },

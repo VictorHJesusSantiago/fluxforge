@@ -1,7 +1,7 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
 
 const ALGORITHM = 'aes-256-gcm';
-const IV_LENGTH = 12; // 96-bit nonce, the size GCM is specified for — anything else needs padding logic this doesn't have.
+const IV_LENGTH = 12;
 
 export class MissingEncryptionKeyError extends Error {
   constructor() {

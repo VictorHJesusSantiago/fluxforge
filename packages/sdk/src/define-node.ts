@@ -40,8 +40,6 @@ export function defineNode<TParams>(input: NodeDefinitionInput<TParams>): NodeDe
   }
   assertUniquePortIds(input.inputs, 'inputs', input.type);
   assertUniquePortIds(input.outputs, 'outputs', input.type);
-  // Zero outputs is legitimate — a terminal "sink" node (log, respond-to-webhook) has nothing
-  // downstream to feed. Zero *inputs* is likewise legitimate: that is exactly what a trigger is.
 
   return Object.freeze({ ...input, __brand: 'fluxforge.NodeDefinition' as const });
 }

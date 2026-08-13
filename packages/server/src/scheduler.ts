@@ -78,7 +78,7 @@ export class CronScheduler {
         if (next === undefined) {
           next = this.options.computeNextFireTime(trigger.params.expression, now);
           this.nextFireAt.set(key, next);
-          continue; // first sighting — schedule, don't fire immediately
+          continue;
         }
 
         if (next.getTime() <= now.getTime()) {
